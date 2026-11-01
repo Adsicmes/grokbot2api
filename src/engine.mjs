@@ -4,7 +4,8 @@ import crypto from 'node:crypto';
 import zlib from 'node:zlib';
 import { encVarint, str, num, decode } from './proto.mjs';
 
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Sand/0.70.2 Safari/537.36';
+const CLIENT_VERSION = process.env.GROKBOT_CLIENT_VERSION || '0.70.2';
+const UA = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Sand/${CLIENT_VERSION} Safari/537.36`;
 const CHECKSUM_PREFIX = '8qKkwpnP'; // recorded from official client; concatenated with machine_id
 
 export class GrokBotEngine {
@@ -48,7 +49,7 @@ export class GrokBotEngine {
       'x-cursor-client-os': 'win32',
       'x-cursor-client-source': 'sand-desktop',
       'x-cursor-client-type': 'sand',
-      'x-cursor-client-version': '0.70.2',
+      'x-cursor-client-version': CLIENT_VERSION,
       'x-ghost-mode': 'true',
       'x-sand-box-namespace': 'prod',
       'x-request-id': crypto.randomUUID(),

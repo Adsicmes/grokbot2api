@@ -6,3 +6,4 @@ files/
 *.log
 sailboat-test.html
 node_modules/
+.env

@@ -1,0 +1,6 @@
+accounts/
+files/
+node_modules/
+.git/
+*.log
+.env
