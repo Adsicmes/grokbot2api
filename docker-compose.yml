@@ -22,3 +22,33 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  # 只读看板 + 测试对话：Bearer 由服务端注入，浏览器拿不到 key。
+  # 访问控制交给 Caddy 的 mTLS（web.grokbot2api.frzmeow.cc），应用本身不做认证。
+  web:
+    image: node:20-alpine
+    container_name: grokbot2api-web
+    restart: unless-stopped
+    working_dir: /app
+    command: ["node", "server.mjs"]
+    env_file: .env
+    environment:
+      UPSTREAM: http://grokbot2api:3010
+      PORT: 3011
+    volumes:
+      - ./web:/app:ro
+    ports:
+      - "127.0.0.1:3011:3011"
+    depends_on:
+      - grokbot2api
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3011/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
